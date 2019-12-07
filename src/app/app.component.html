@@ -1,9 +1,10 @@
-<ion-app>
+
+<ion-app *ngIf="signedIn">
   <ion-split-pane contentId="main-content">
     <ion-menu contentId="main-content" type="overlay">
       <ion-header>
         <ion-toolbar>
-          <ion-title>Menu</ion-title>
+          <ion-title>Mangaseed</ion-title>
         </ion-toolbar>
       </ion-header>
       <ion-content>
@@ -22,3 +23,7 @@
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>
+<div *ngIf="!signedIn"> 
+<h1 text-center class="header">Mangaseed</h1>
+<amplify-authenticator [hide]="['Greetings']"></amplify-authenticator>
+</div>

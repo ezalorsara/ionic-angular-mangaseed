@@ -1,5 +1,7 @@
 {
   "name": "mobileMangaseed",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

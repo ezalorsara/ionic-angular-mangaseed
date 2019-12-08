@@ -14,7 +14,7 @@ import Auth from '@aws-amplify/auth';
 import Interactions from '@aws-amplify/interactions';
 import Storage from '@aws-amplify/storage';
 import { LoginComponent } from './pages/login/login.component';
-import { ReactiveFormsModule } from '@angular/forms';
+
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -23,8 +23,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    AmplifyAngularModule,
-    ReactiveFormsModule
+    AmplifyAngularModule
   ],
   providers: [
     StatusBar,

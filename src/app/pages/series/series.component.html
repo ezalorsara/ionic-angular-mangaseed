@@ -1,3 +1,156 @@
-<p>
-  series works!
-</p>
+<ion-content padding>
+  <form [formGroup]="addSeriesForm" (ngSubmit)="doAddSeries(addSeriesForm)">
+    <ion-grid>
+      <ion-row justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div text-center>
+            <h3>Add Series</h3>
+          </div>
+          <div padding>
+            <ion-item>
+                <ion-label position="floating">Series Title</ion-label>
+              <ion-input name="title" type="text" formControlName="title" ></ion-input>
+            </ion-item>
+            <ion-text color="danger" *ngIf="!addSeriesForm.controls.title.valid  && (addSeriesForm.controls.title.dirty || isLoadingSubmit)">
+              <p>Title is required!</p>
+            </ion-text>
+            <ion-item>
+              <ion-label position="floating">Description</ion-label>
+              <ion-textarea name="description" formControlName="description"></ion-textarea>
+            </ion-item>
+            <ion-text color="danger" *ngIf="!addSeriesForm.controls.description.valid  && (addSeriesForm.controls.description.dirty || isLoadingSubmit)">
+              <p>Description is required!</p>
+            </ion-text>
+          </div>
+          <div padding>
+            <ion-list>
+              <ion-list-header>Language</ion-list-header>
+              <ion-item>
+                <ion-select placeholder="Select One" formControlName="language">
+                  <ion-select-option value="en">English</ion-select-option>
+                  <ion-select-option value="fil">Filipino</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-text color="danger" *ngIf="!addSeriesForm.controls.language.valid  && (addSeriesForm.controls.language.dirty || isLoadingSubmit)">
+                <p>Language is required!</p>
+              </ion-text>
+            </ion-list>
+            <ion-list>
+              <ion-list-header>Author</ion-list-header>
+              <ion-item>
+                <ion-select multiple="true" cancelText="Nah" okText="Okay!" name="authors" formControlName="authors">
+                  <ion-select-option value="author a">Author A</ion-select-option>
+                  <ion-select-option value="author b">Author B</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-text color="danger" *ngIf="!addSeriesForm.controls.authors.valid  && (addSeriesForm.controls.authors.dirty || isLoadingSubmit)">
+                <p>Authors is required!</p>
+              </ion-text>
+            </ion-list>
+            
+            <ion-list>
+              <ion-list-header>Artist</ion-list-header>
+              <ion-item>
+                <ion-select multiple="true" cancelText="Nah" okText="Okay!" name="artists" formControlName="artists">
+                  <ion-select-option value="artist a">Artist A</ion-select-option>
+                  <ion-select-option value="artist b">Artist B</ion-select-option>
+                </ion-select>
+              </ion-item>
+              <ion-text color="danger" *ngIf="!addSeriesForm.controls.artists.valid  && (addSeriesForm.controls.artists.dirty || isLoadingSubmit)">
+                <p>Artists is required!</p>
+              </ion-text>
+            </ion-list>
+            <ion-list>
+                <ion-list-header>Cover Image</ion-list-header>
+                <ion-item>
+                  <input name="cover" type="file"  formControlName="cover" (change)="onFileChange($event)">
+                </ion-item>
+                <ion-text color="danger" *ngIf="!addSeriesForm.controls.cover.valid  && (addSeriesForm.controls.cover.dirty || isLoadingSubmit)">
+                  <p>Cover image is required!</p>
+                </ion-text>
+            </ion-list>
+            <ion-list>
+              <ion-radio-group [(ngModel)]="mStatus" [ngModelOptions]="{standalone: true}">
+                <ion-list-header>
+                  <ion-label>Status?</ion-label>
+                </ion-list-header>
+            
+                <ion-item>
+                  <ion-label>On-Going</ion-label>
+                  <ion-radio slot="start" value="on-going" formControlName="status"></ion-radio>
+                </ion-item>
+            
+                <ion-item>
+                  <ion-label>Complete</ion-label>
+                  <ion-radio slot="start" value="complete" formControlName="status"></ion-radio>
+                </ion-item>
+                
+              </ion-radio-group>
+              <ion-text color="danger" *ngIf="!addSeriesForm.controls.status.valid  && (addSeriesForm.controls.status.dirty || isLoadingSubmit)">
+                <p>Status is required!</p>
+              </ion-text>
+            </ion-list>
+            <ion-list>
+              <ion-list-header>Tags</ion-list-header>
+              <ion-item>
+                <ion-select multiple="true" cancelText="Nah" okText="Okay!" formControlName="tags">
+                  <ion-select-option value="action">Action</ion-select-option>
+                  <ion-select-option value="romantic">Romantic</ion-select-option>
+                </ion-select>
+              </ion-item>
+            </ion-list>
+            <ion-text color="danger" *ngIf="!addSeriesForm.controls.tags.valid  && (addSeriesForm.controls.tags.dirty || isLoadingSubmit)">
+              <p>Tags/Genre is required!</p>
+            </ion-text>
+            <ion-list>
+              <ion-radio-group [(ngModel)]="mFeatured" [ngModelOptions]="{standalone: true}">
+                <ion-list-header>
+                  <ion-label>Featured?</ion-label>
+                </ion-list-header>
+          
+                <ion-item>
+                  <ion-label>No</ion-label>
+                  <ion-radio slot="start" value="no" formControlName="isFeatured"></ion-radio>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Yes</ion-label>
+                  <ion-radio slot="start" value="yes" formControlName="isFeatured"></ion-radio>
+                </ion-item>
+            
+              </ion-radio-group>
+            </ion-list>
+            <ion-text color="danger" *ngIf="!addSeriesForm.controls.isFeatured.valid  && (addSeriesForm.controls.isFeatured.dirty || isLoadingSubmit)">
+              <p>Featured is required!</p>
+            </ion-text>
+            <ion-list>
+              <ion-radio-group [(ngModel)]="mPublished" [ngModelOptions]="{standalone: true}">
+                <ion-list-header>
+                  <ion-label>Published?</ion-label>
+                </ion-list-header>
+          
+                <ion-item>
+                  <ion-label>No</ion-label>
+                  <ion-radio slot="start" value="no" formControlName="published"></ion-radio>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label>Yes</ion-label>
+                  <ion-radio slot="start" value="yes" formControlName="published"></ion-radio>
+                </ion-item>
+            
+              </ion-radio-group>
+            </ion-list>
+            <ion-text color="danger" *ngIf="!addSeriesForm.controls.published.valid  && (addSeriesForm.controls.published.dirty || isLoadingSubmit)">
+              <p>Published is required!</p>
+            </ion-text>
+          </div>
+          <div padding>
+            <ion-button size="large" type="submit"  expand="block" [disabled]="isLoadingSubmit"><ion-spinner style="margin-right: 20px;" *ngIf="isLoadingSubmit"></ion-spinner> Submit</ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+  </form>
+</ion-content>

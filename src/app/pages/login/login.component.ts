@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Validators, FormBuilder, FormGroup } from '@angular/forms';
-
+import { AmplifyService }  from 'aws-amplify-angular';
 
 @Component({
   selector: 'app-login',
@@ -11,7 +11,11 @@ export class LoginComponent implements OnInit {
 
   loginForm:FormGroup;
 
-  constructor(fb:FormBuilder) {
+  constructor(
+    private fb:FormBuilder,
+    private amplifyService:AmplifyService
+  ) 
+  {
     this.loginForm = fb.group({
       name: ["", Validators.required]
     });
@@ -20,6 +24,9 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   login(form){
+
+    this.amplifyService.auth().login()
+
     // this.authService.login(form.value).subscribe((res)=>{
     //   this.router.navigateByUrl('home');
     // });

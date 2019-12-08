@@ -5,6 +5,7 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Router } from '@angular/router';
 import { AmplifyService }  from 'aws-amplify-angular';
+import Amplify, { Auth } from 'aws-amplify';
 
 @Component({
   selector: 'app-root',
@@ -53,6 +54,7 @@ export class AppComponent {
     private amplifyService: AmplifyService
   ) {
     this.initializeApp();
+    
   }
 
   initializeApp() {
@@ -73,5 +75,15 @@ export class AppComponent {
       });
 
     });
+  }
+
+
+  doLogout(){
+    Auth.signOut().then(val=>{
+      console.log(val);
+      this.router.navigate(['/']);
+    }).catch(err=>{
+      console.log("Error!");
+    })
   }
 }

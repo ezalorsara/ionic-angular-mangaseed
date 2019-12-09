@@ -1,3 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>
+      Add Series
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
 <ion-content padding>
   <form [formGroup]="addSeriesForm" (ngSubmit)="doAddSeries(addSeriesForm)">
     <ion-grid>
@@ -38,7 +48,7 @@
             <ion-list>
               <ion-list-header>Author</ion-list-header>
               <ion-item>
-                <ion-select multiple="true" cancelText="Nah" okText="Okay!" name="authors" formControlName="authors">
+                <ion-select multiple="true" cancelText="Cancel" okText="Continue" name="authors" formControlName="authors">
                   <ion-select-option value="author a">Author A</ion-select-option>
                   <ion-select-option value="author b">Author B</ion-select-option>
                 </ion-select>
@@ -51,7 +61,7 @@
             <ion-list>
               <ion-list-header>Artist</ion-list-header>
               <ion-item>
-                <ion-select multiple="true" cancelText="Nah" okText="Okay!" name="artists" formControlName="artists">
+                <ion-select multiple="true" cancelText="Cancel" okText="Continue" name="artists" formControlName="artists">
                   <ion-select-option value="artist a">Artist A</ion-select-option>
                   <ion-select-option value="artist b">Artist B</ion-select-option>
                 </ion-select>
@@ -93,7 +103,7 @@
             <ion-list>
               <ion-list-header>Tags</ion-list-header>
               <ion-item>
-                <ion-select multiple="true" cancelText="Nah" okText="Okay!" formControlName="tags">
+                <ion-select multiple="true" cancelText="Cancel" okText="Continue" formControlName="tags">
                   <ion-select-option value="action">Action</ion-select-option>
                   <ion-select-option value="romantic">Romantic</ion-select-option>
                 </ion-select>

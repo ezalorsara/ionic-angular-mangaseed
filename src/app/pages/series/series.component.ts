@@ -1,9 +1,9 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import {Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { AmplifyService }  from 'aws-amplify-angular';
-import Amplify, { Storage as AwsStorage, Auth as AwsAuth , API as AwsAPI} from 'aws-amplify';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
-import config  from '../../../config';
+import Amplify, { Storage as AwsStorage, API as AwsAPI} from 'aws-amplify';
+import { ToastController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-series',
@@ -23,35 +23,10 @@ export class SeriesComponent implements OnInit {
     private fb:FormBuilder,
     private amplifyService:AmplifyService,
     private cd: ChangeDetectorRef,
-    private http: HttpClient
+    public toastController: ToastController
   ) 
   {
-
-    Amplify.configure({
-        Auth: {
-            identityPoolId: config.Auth.identityPoolId, 
-            region: config.Auth.region,
-            userPoolId: config.Auth.userPoolId,
-            userPoolWebClientId: config.Auth.userPoolWebClientId
-        },
-        API: {
-          endpoints: [
-            {
-                name: "MYAPI",
-                endpoint: config.apiUrl
-            }
-          ]
-        },
-        Storage: {
-            AWSS3: {
-              bucket: config.Storage.bucket,
-              region: config.Storage.region,
-              acl: config.Storage.acl,
-              level: config.Storage.level
-            }
-        }
-    });
-
+    
     this.addSeriesForm = fb.group({
       cover: new FormControl(null, Validators.required),
       title: new FormControl(null, Validators.required),
@@ -69,58 +44,61 @@ export class SeriesComponent implements OnInit {
 
   ngOnInit() {}
 
+  async submitSuccessToast() {
+    const toast = await this.toastController.create({
+      message: 'Add New Series Successfully!.',
+      duration: 3000,
+      position: 'top',
+      header: 'Message:'
+    });
+    toast.present();
+  }
+
   async doAddSeries(){
     this.isLoadingSubmit = true;
+ 
+    const timestamp = Date.now()
     if(this.addSeriesForm.valid){
       try {
-        const attachment:any = this.addSeriesForm.controls.cover ? await AwsStorage.put(this.coverImage.name, this.coverImage, {contentType: this.coverImage.type }) : "";
+        const coverImageKey:string = timestamp+this.addSeriesForm.controls.title.value.split(' ').join('-');
+        await AwsStorage.put(coverImageKey, this.coverImage, {contentType: this.coverImage.type, level: "public" });
+  
         let postParam = {
           title: this.addSeriesForm.controls.title.value,
           description: this.addSeriesForm.controls.description.value,
           language: this.addSeriesForm.controls.language.value,
           authorsName: this.addSeriesForm.controls.authors.value,
           artistsName: this.addSeriesForm.controls.artists.value,
-          coverImage: attachment.key,
+          coverImage: coverImageKey,
           isFeatured: this.mFeatured,
           status : this.mStatus,
           tags: this.addSeriesForm.controls.tags.value,
           published: this.mPublished
         }
 
-        const httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type':  'application/json',
-          'Accept' : 'application/json'
-          })
-        };
-
         AwsAPI.post("MYAPI", "private/series", {
           body : postParam
-        }).then(data=>{
-          console.log("Result: ");
-          console.log(data);
+        }).then(_data=>{
           this.isLoadingSubmit = false;
+          this.addSeriesForm.reset();
+          this.submitSuccessToast();
         }).catch(err=>{
           console.log('Error!');
           console.log(err);
           this.isLoadingSubmit = false;
+          this.addSeriesForm.reset();
+          this.submitSuccessToast();
         });
-
-        // this.http.post(config.apiUrl+"private/series", postParam, httpOptions)
-        // .subscribe(data => {
-          
-        // }, error => {
-          
-        // });
-    }catch(e){
-      console.log("Error: ");
-      console.log(e);
+        
+      }catch(e){
+        console.log("Error: ");
+        console.log(e);
+      }
+    }else{
+      this.isLoadingSubmit = false;
     }
-  }else{
-    this.isLoadingSubmit = false;
-  }
 
-  }
+    }
 
   onFileChange(event) {
     const reader = new FileReader();

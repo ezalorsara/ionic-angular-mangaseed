@@ -26,7 +26,7 @@ export class AppComponent {
     },
     {
       title: 'Series List',
-      url: '/list',
+      url: '/series/list',
       icon: 'list'
     },
     {

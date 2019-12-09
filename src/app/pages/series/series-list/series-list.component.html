@@ -10,19 +10,50 @@
 </ion-header>
 
 <ion-content padding>
+  <!-- Searchbar in a Toolbar -->
+  <ion-toolbar>
+    <ion-searchbar></ion-searchbar>
+  </ion-toolbar>
   <div>
     <ion-list>
-      <ion-item *ngFor="let s of series">
-        <ion-thumbnail slot="start">
-          <img [src]="s.coverImageUrl">
-        </ion-thumbnail>
-        <ion-label>
-          <h2>{{s.title}}</h2>
-          <h3>Authors: {{s.authorsName.join(', ')}}</h3>
-          <h3>Artist: {{s.artistsName.join(', ')}}</h3>
-          <p>{{s.description}}</p>
-        </ion-label>
+      
+      <ion-item>
+        <ion-label>Order</ion-label>
+        <ion-select [(ngModel)]="mSort" (ionChange)="doSort($event)">
+          <ion-select-option value="date_asc" selected>ASC BY Date Created</ion-select-option>
+          <ion-select-option value="date_desc" >DESC Date Created</ion-select-option>
+          <ion-select-option value="title_asc" >Title A-Z</ion-select-option>
+          <ion-select-option value="title_desc" >Title Z-A</ion-select-option>
+        </ion-select>
       </ion-item>
+   
+    </ion-list>
+    <ion-list>
+      <div *ngFor="let s of series">
+        <ion-item>
+          <ion-thumbnail slot="start">
+            <img [src]="s.coverImageUrl">
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{s.title}}</h2>
+            <h3>Authors: {{s.authorsName.join(', ')}}</h3>
+            <h3>Artist: {{s.artistsName.join(', ')}}</h3>
+            <p>{{s.description}}</p>
+            <p>Last Update: {{s.gsi1sk | date:'medium'}}</p>
+          </ion-label>
+        </ion-item>
+        <ion-toolbar style="text-align: left !important;" item-content class="transparent-toolbar" text-center>
+          <ion-chip outline color="primary">
+            <ion-label>Edit</ion-label>
+            <ion-icon name="create"></ion-icon>
+          </ion-chip>
+          <ion-chip outline color="primary">
+            <ion-label>View</ion-label>
+            <ion-icon name="eye"></ion-icon>
+          </ion-chip>  
+        </ion-toolbar>
+      </div>
+      <div *ngIf="loaderItems.length === 0 && series.length === 0">No Items</div>
     </ion-list>
   </div>
 

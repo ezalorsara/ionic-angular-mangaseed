@@ -12,7 +12,8 @@ export class SeriesListComponent implements OnInit {
 
   series = []; 
   loaderItems = [0,1,2,3,4,5,6,7,8,9]; // default 10 items
-  
+  mSort = "date_asc"; // pre-select order
+
   constructor(
     private http:HttpClient
   ) 
@@ -27,6 +28,34 @@ export class SeriesListComponent implements OnInit {
       this.loadItemAndImage(data.data);
     });
     
+  }
+
+  doSort(_event){
+    
+    this.series = []; 
+    this.loaderItems = [0,1,2,3,4,5,6,7,8,9];
+
+    let sortQuery = "";
+    switch(this.mSort){
+      case 'date_asc':
+        sortQuery = '?order=asc';
+      break;
+      case 'date_desc':
+        sortQuery = '?order=desc';
+      break;
+      case 'title_asc':
+        sortQuery = '?order=asc&orderby=title';
+      break;
+      case 'title_desc':
+         sortQuery = '?order=desc&orderby=title';
+      break;
+    }
+
+    this.getSeriesList(data=>{
+      this.loadItemAndImage(data.data);
+    }, sortQuery);
+
+
   }
 
   loadItemAndImage(data=[]){
@@ -49,7 +78,7 @@ export class SeriesListComponent implements OnInit {
   
   }
 
-  async getSeriesList(cb){
+  async getSeriesList(cb, sortQuery=""){
   
     const httpOptions = {
       headers: new HttpHeaders({
@@ -58,7 +87,7 @@ export class SeriesListComponent implements OnInit {
       })
     };
 
-    this.http.get(config.apiUrl + "public/series", httpOptions).subscribe(data=>{
+    this.http.get(config.apiUrl + "public/series"+sortQuery, httpOptions).subscribe(data=>{
       cb(data);
     }, err=>{
       console.log(err);

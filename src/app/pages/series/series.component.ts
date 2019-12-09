@@ -80,7 +80,15 @@ export class SeriesComponent implements OnInit {
           body : postParam
         }).then(_data=>{
           this.isLoadingSubmit = false;
+          
           this.addSeriesForm.reset();
+          this.mPublished = "";
+          this.mFeatured = "";
+          this.mStatus = "";
+          this.addSeriesForm.controls.isFeatured.reset();
+          this.addSeriesForm.controls.status.reset();
+          this.addSeriesForm.controls.published.reset();
+       
           this.submitSuccessToast();
         }).catch(err=>{
           console.log('Error!');

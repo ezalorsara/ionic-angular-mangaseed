@@ -11,8 +11,38 @@
 
 <ion-content padding>
   <!-- Searchbar in a Toolbar -->
-  <ion-toolbar>
-    <ion-searchbar></ion-searchbar>
+  <ion-toolbar style="position: relative;">
+    <ion-searchbar placeholder="Series Title" (input)="doSearch($event)"></ion-searchbar>
+      
+    <ion-list style="width: 100%; ">
+      <ion-item *ngIf="searchSeries.length === 0 && queryText != '' && searching === false">No series found!</ion-item>
+      <ion-item *ngFor="let s of searchSeries">
+        <ion-thumbnail slot="start" >
+          <a href="#"><img [src]="s.coverImageUrl"></a>
+        </ion-thumbnail>
+        <ion-label>
+          <a href="#"><h3>{{s.title}}</h3></a>
+          <h3>Authors: {{s.authorsName.join(', ')}}</h3>
+          <h3>Artist: {{s.artistsName.join(', ')}}</h3>
+          <p>Last Update: {{s.gsi1sk | date:'medium'}}</p>
+        </ion-label>
+      </ion-item>
+      <div *ngIf="searching">
+        <ion-item *ngFor="let number of searchLoaderItems">
+          <ion-thumbnail slot="start">
+            <ion-skeleton-text animated></ion-skeleton-text>
+          </ion-thumbnail>
+          <ion-label>
+            <p>
+              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+            </p>
+            <p>
+              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+            </p>
+          </ion-label>
+        </ion-item>
+      </div>
+    </ion-list>
   </ion-toolbar>
   <div>
     <ion-list>
